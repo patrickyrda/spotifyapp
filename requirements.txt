@@ -1,0 +1,6 @@
+Flask==2.2.2
+Celery==5.2.7
+redis==4.4.0
+spotipy==2.19.1
+mysql-connector-python==8.0.31
+python-dotenv==0.21.0

@@ -1,5 +1,3 @@
-# spotify_service.py
-
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import mysql.connector

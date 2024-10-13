@@ -1,25 +1,11 @@
 from flask import Blueprint, request, render_template, jsonify, redirect, url_for
-from app.config import Config
-from app.services.connection_services import get_spotify_instance, get_db_instance
-from app.models.PlaylistManager import PlaylistManager  # Import your PlaylistManager class
 import os
-import spotipy  # You need to import spotipy for handling its exceptions
-import mysql.connector  # Import the mysql.connector module
-
+import spotipy  
+import mysql.connector 
+from app.services.playlist_instance import manager, sp
+from app.tasks import manage_playlist_job
 
 routes = Blueprint('routes', __name__)
-
-
-# Set up Spotify API
-sp = get_spotify_instance()
-db = get_db_instance()
-
-#Limit of musics of the playlist
-limit = 10
-
-manager = PlaylistManager(sp, db, Config.PLAYLIST_ID, limit)
-
-
 
 
 
@@ -46,9 +32,9 @@ def add_to_playlist(track_id):
     try:
         # Add track to database and playlist if it doesn't exist or increment votes
         manager.add_track_general(track_id)
-    #    take care of when calling this fucnction dont need to be everytime
-        manager.manage_playlist()
         
+        manage_playlist_job()
+
         return redirect(url_for('routes.search'))
     
     except spotipy.exceptions.SpotifyException as e:
