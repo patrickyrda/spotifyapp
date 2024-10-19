@@ -26,7 +26,7 @@ def ajax_search():
     } for track in results['tracks']['items']]
     return jsonify(tracks)
 
-@routes.route('/add/<track_id>')
+@routes.route('/add/<track_id>', methods=['POST'])
 def add_to_playlist(track_id):
 
     try:
@@ -35,22 +35,18 @@ def add_to_playlist(track_id):
         
         manage_playlist_job()
 
-        return redirect(url_for('routes.search'))
-    
+        return jsonify({'status': 'success'}), 200
+
     except spotipy.exceptions.SpotifyException as e:
         # Handle Spotify API errors
-        print(f"Spotify API error occurred: {e}")
-        return "An error occurred while interacting with Spotify.", 500
+        return jsonify({'status': 'error', 'message': str(e)}), 500
     
     except mysql.connector.Error as e:
         # Handle MySQL database errors
-        print(f"Database error occurred: {e}")
-        return "An error occurred while interacting with the database.", 500
+        return jsonify({'status': 'error', 'message': str(e)}), 500
     
     except Exception as e:
         # Handle any other errors
-        print(f"An unexpected error occurred: {e}")
-        return "An unexpected error occurred.", 500
-    
+        return jsonify({'status': 'error', 'message': str(e)}), 500
     
 

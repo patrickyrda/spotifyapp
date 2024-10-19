@@ -3,86 +3,15 @@
 <head>
     <meta charset="utf-8">
     <title>Music Search</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            font-family: Arial, sans-serif;
-        }
-
-        #search-input {
-            width: 50%;
-            padding: 10px;
-            font-size: 18px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .results {
-            width: 60%;
-            text-align: left;
-        }
-
-        .result-item {
-            display: flex;
-            align-items: center; /* Align the text and image */
-            margin-bottom: 10px;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            font-size: 18px;
-        }
-
-        .result-item img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover; /* Ensure the image fits within the specified size */
-            margin-right: 15px; /* Space between the image and track info */
-        }
-
-        a {
-            margin-left: 10px;
-            color: blue;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
 </head>
 <body>
+    
+    <div id="phrase">What music can't you stop listening to?</div>
     <input type="text" id="search-input" placeholder="Search for music..." autocomplete="off">
     <div id="results" class="results"></div>
 
-    <script>
-        document.getElementById('search-input').addEventListener('input', function() {
-            const query = this.value;
-            if (query.length > 0) {
-                fetch(`/search?query=${encodeURIComponent(query)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const resultsDiv = document.getElementById('results');
-                        resultsDiv.innerHTML = '';
-                        data.forEach(track => {
-                            const trackElement = document.createElement('div');
-                            trackElement.classList.add('result-item');
-                            trackElement.innerHTML = `
-                                <img src="${track.album_cover}" alt="Album cover">
-                                ${track.name} by ${track.artist}
-                                <a href="/add/${track.uri}">Add to Playlist</a>
-                            `;
-                            resultsDiv.appendChild(trackElement);
-                        });
-                    });
-            } else {
-                document.getElementById('results').innerHTML = '';
-            }
-        });
-    </script>
+    <script src="{{ url_for('static', filename='searchscript.js') }}"></script>
 </body>
 </html>
